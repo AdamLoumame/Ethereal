@@ -1,0 +1,162 @@
+@import "tailwindcss";
+/* tailwind settings */
+@custom-variant dark (&:is(.dark *));
+
+/* activating hover on touch devices */
+
+/* Customs */
+:root {
+	--dark: #0e1012;
+	--sec-dark: #343434;
+	--text-dark: #f3f6fa;
+	--light: #e8e5f0;
+	--sec-light: #d7d4e2;
+	--text-light: #1a4572;
+}
+@theme {
+	--color-dark: var(--dark);
+	--color-sec-dark: var(--sec-dark);
+	--color-textDark: var(--text-dark);
+	--color-light: var(--light);
+	--color-sec-light: var(--sec-light);
+	--color-textLight: var(--text-light);
+}
+
+@font-face {
+	font-family: "MyCustomFont";
+	src: url("./assets/Roboto-VariableFont_wdth\,wght.ttf") format("truetype");
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "Rochester";
+	src: url("./assets/Rochester-Regular.ttf") format("truetype");
+	font-style: normal;
+	font-display: swap;
+}
+body {
+	font-family: "MyCustomFont", serif;
+	@apply dark:bg-dark dark:text-textDark bg-light text-textLight overflow-hidden;
+}
+.box {
+	@apply dark:bg-light dark:text-textLight text-textDark bg-dark duration-300;
+}
+.box2 {
+	@apply dark:bg-sec-light dark:text-textLight text-textDark bg-sec-dark duration-300;
+}
+input:focus {
+	outline: none;
+}
+.frost {
+	background: rgba(255, 255, 255, 0.05);
+	backdrop-filter: blur(8.5px);
+	-webkit-backdrop-filter: blur(8.5px);
+}
+.flex-center {
+	@apply flex justify-center items-center;
+}
+
+.bg {
+	background-blend-mode: multiply;
+}
+.bg::after {
+	content: "";
+	@apply absolute top-0 left-0 size-full;
+	background-color: rgb(0 0 0 / 60%);
+}
+.noise {
+	background-image: url("/src/assets/noise.png");
+	animation: 2s steps(1) infinite noise;
+	background-position: 50%;
+	background-size: 256px;
+	flex: none;
+	width: 300%;
+	max-width: none;
+	height: 300%;
+	position: absolute;
+	inset: -150% 0% 0% -150%;
+}
+.logo {
+	font-family: "Rochester", serif;
+}
+.nav-el {
+	@apply duration-250 font-bold text-3xl flex items-center gap-6 opacity-60;
+}
+.nav-el:hover {
+	opacity: 1;
+}
+.active-nav-el,
+.nav-el.explore {
+	opacity: 1;
+}
+.nav-el.explore::before {
+	content: "";
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	height: 110%;
+	width: 103%;
+	border-radius: 500px;
+	background: linear-gradient(var(--angle), var(--light), #27272a) border-box;
+	animation: explore 6s ease-in infinite;
+	border: solid 4px #0000;
+	transition: .3s;
+}
+.dark .nav-el.explore::before {
+	background: linear-gradient(var(--angle), var(--text-light), transparent) border-box;
+}
+.nav-el.explore:hover::before {
+	height: 112%;
+	width: 104%;
+}
+.dark .nav-el.explore:hover span {
+	background-color: #ced2d6;
+}
+.nav-el.explore:hover span {
+	background-color: #1a1d20;
+}
+/* animations */
+@keyframes noise {
+	0%,
+	100% {
+		background-position: 0 0;
+	}
+	10% {
+		background-position: -5% -10%;
+	}
+	20% {
+		background-position: -15% 5%;
+	}
+	30% {
+		background-position: 7% -25%;
+	}
+	40% {
+		background-position: 20% 25%;
+	}
+	50% {
+		background-position: -25% 10%;
+	}
+	60% {
+		background-position: 15% 5%;
+	}
+	70% {
+		background-position: 0% 15%;
+	}
+	80% {
+		background-position: 25% 35%;
+	}
+	90% {
+		background-position: -10% 10%;
+	}
+}
+@keyframes explore {
+	to {
+		--angle: 360deg;
+	}
+}
+@property --angle {
+	syntax: "<angle>";
+	initial-value: 0deg;
+	inherits: false;
+}
