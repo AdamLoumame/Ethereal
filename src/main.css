@@ -1,120 +1,166 @@
 @import "tailwindcss";
-/* tailwind settings */
-@custom-variant dark (&:is(.dark *));
-
 /* activating hover on touch devices */
+@custom-variant hover (&:hover);
 
+/* dark mode activation */
+@custom-variant dark (&:where(.dark, .dark *));
+
+*{
+	scroll-behavior:smooth;
+}
 /* Customs */
 :root {
 	--dark: #0e1012;
 	--sec-dark: #343434;
 	--text-dark: #f3f6fa;
 	--light: #e8e5f0;
-	--sec-light: #d7d4e2;
 	--text-light: #1a4572;
 }
 @theme {
 	--color-dark: var(--dark);
-	--color-sec-dark: var(--sec-dark);
 	--color-textDark: var(--text-dark);
 	--color-light: var(--light);
-	--color-sec-light: var(--sec-light);
 	--color-textLight: var(--text-light);
 }
 
 @font-face {
-	font-family: "MyCustomFont";
+	font-family: "Roboto";
 	src: url("./assets/Roboto-VariableFont_wdth\,wght.ttf") format("truetype");
 	font-style: normal;
 	font-display: swap;
 }
-@font-face {
-	font-family: "Rochester";
-	src: url("./assets/Rochester-Regular.ttf") format("truetype");
-	font-style: normal;
-	font-display: swap;
-}
-body {
-	font-family: "MyCustomFont", serif;
-	@apply dark:bg-dark dark:text-textDark bg-light text-textLight overflow-hidden;
-}
-.box {
-	@apply dark:bg-light dark:text-textLight text-textDark bg-dark duration-300;
-}
-.box2 {
-	@apply dark:bg-sec-light dark:text-textLight text-textDark bg-sec-dark duration-300;
-}
 input:focus {
 	outline: none;
 }
-.frost {
+iframe {
+	border: none;
+}
+body {
+	font-family: "Roboto", serif;
+	@apply dark:bg-dark dark:text-textDark bg-light text-textLight overflow-hidden;
+}
+body.modal-on{
+	@apply !overflow-hidden 	
+}
+body:has(.no-mode){
+	@apply bg-dark text-textDark overflow-visible;
+}
+body:has(.no-mode) .box{
+	@apply bg-light text-textLight;
+}
+body:has(.no-mode) .button{
+	@apply text-textDark bg-dark duration-300;
+}
+body:has(.no-mode) .button.active,body:has(.no-mode) .button:hover,body:has(.no-mode) .logo{
+	@apply text-textDark border-textDark;  
 	background: rgba(255, 255, 255, 0.05);
 	backdrop-filter: blur(8.5px);
 	-webkit-backdrop-filter: blur(8.5px);
 }
+.box {
+	@apply dark:bg-light dark:text-textLight text-textDark bg-dark duration-300;
+}
 .flex-center {
 	@apply flex justify-center items-center;
 }
-
-.bg {
-	background-blend-mode: multiply;
-}
-.bg::after {
+.noise::before{
 	content: "";
-	@apply absolute top-0 left-0 size-full;
-	background-color: rgb(0 0 0 / 60%);
-}
-.noise {
 	background-image: url("/src/assets/noise.png");
 	animation: 2s steps(1) infinite noise;
 	background-position: 50%;
 	background-size: 256px;
 	flex: none;
-	width: 300%;
-	max-width: none;
-	height: 300%;
+	height: 100%;
+	width: 100%;
 	position: absolute;
-	inset: -150% 0% 0% -150%;
+	top: 0;
+	left: 0;
 }
-.logo {
-	font-family: "Rochester", serif;
+.nav-el svg{
+	opacity: .7;
+	transition:  .3s;
 }
-.nav-el {
-	@apply duration-250 font-bold text-3xl flex items-center gap-6 opacity-60;
-}
-.nav-el:hover {
+.active-nav-el svg,
+.nav-el:hover svg {
 	opacity: 1;
 }
-.active-nav-el,
-.nav-el.explore {
-	opacity: 1;
+.active-nav-el::before{
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	border-color: inherit;
+	border: .15rem solid;
+	border-top-right-radius: 1.5rem;
+	border-bottom-right-radius: 2.5rem;
+	transition: .3s;
 }
-.nav-el.explore::before {
+.button{
+	@apply border-1 dark:bg-light dark:text-textLight text-textDark bg-dark duration-300;
+}
+.button.active,.button:hover{
+	@apply dark:text-textDark dark:border-light text-textLight border-dark;  
+}
+.genre.active,.genre:hover{
+	backdrop-filter: unset !important;
+	-webkit-backdrop-filter: unset !important;
+}
+.slider{
+	mask-image: linear-gradient(90deg,transparent 0,#000 10%,#000 90%,transparent 100%) !important;
+}
+.slider-button:hover > span{
+	@apply scale-105
+}
+.slider-parent:hover .slider-button-icon{
+	@apply opacity-100 scale-100;
+}
+.section-title{
+	@apply text-2xl px-14 font-medium;
+}
+.tooltip::before{
 	content: "";
 	position: absolute;
 	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	height: 110%;
-	width: 103%;
-	border-radius: 500px;
-	background: linear-gradient(var(--angle), var(--light), #27272a) border-box;
-	animation: explore 6s ease-in infinite;
-	border: solid 4px #0000;
-	transition: .3s;
+	bottom: 100%;
+	transform: translateX(-50%);
+	border: .6rem solid transparent;
+	border-bottom-color: rgba(255, 255, 255, 0.05);
+
 }
-.dark .nav-el.explore::before {
-	background: linear-gradient(var(--angle), var(--text-light), transparent) border-box;
+div:has(.tooltip):hover > .tooltip{
+	opacity: 1;
+	scale: 1;
+	transform-origin: top;
 }
-.nav-el.explore:hover::before {
-	height: 112%;
-	width: 104%;
+.scrollx {
+	-ms-overflow-style: none;
+	scrollbar-width: none; 
+	overflow-x: scroll;
+	scroll-snap-type: x mandatory;
 }
-.dark .nav-el.explore:hover span {
-	background-color: #ced2d6;
+.scrolly {
+	-ms-overflow-style: none;
+	scrollbar-width: none; 
+	overflow-x: scroll;
+	scroll-snap-type: y mandatory;
 }
-.nav-el.explore:hover span {
-	background-color: #1a1d20;
+
+.lazy-img-loaded {
+	opacity: 1;
+	transform: scale(1);
+}
+.link .line{
+	width: 0;
+	height: .5px;
+	background-color: #e8e5f0;
+	transition: .3s ease;
+}
+.expandable-text p:not(:first-of-type){
+	margin-top: 1rem;
+}
+.episode-image{
+	mask-image: linear-gradient(to bottom, black 20%, transparent 70%);
 }
 /* animations */
 @keyframes noise {
@@ -150,13 +196,29 @@ input:focus {
 		background-position: -10% 10%;
 	}
 }
-@keyframes explore {
-	to {
-		--angle: 360deg;
-	}
+.frost,
+.button.active,.button:hover{
+	background: rgba(255, 255, 255, 0.05);
+	backdrop-filter: blur(8.5px);
+	-webkit-backdrop-filter: blur(8.5px);
 }
-@property --angle {
-	syntax: "<angle>";
-	initial-value: 0deg;
-	inherits: false;
+.frost2,
+.mute-button::before,
+.suggestion.active,
+.header-el:hover{
+	background: rgba(0, 0, 0, 0.25);
+	backdrop-filter: blur(8.5px);
+	-webkit-backdrop-filter: blur(8.5px);
+}
+.collection .name{
+	transition: opacity .2s,max-width .15s,margin-right .3s;
+}
+.collection:hover .name{
+	transition: opacity .4s,max-width .3s,margin-right .6s;
+	max-width: 25vw;
+	opacity: 1;
+	margin-right: 1rem;
+}
+.collection-content{
+	transform-origin: calc(100% - 1rem) 0%;
 }

@@ -1,21 +1,20 @@
-import { useContext, Suspense } from "react"
+import { useContext } from "react"
 import HeroMovie from "./HeroMovie"
-import { getTrending } from "/src/services/api.js"
+import { getTrending } from "@/services/api.js"
 import { formatContext } from "./Dashboard"
-import useSWRImmutable from "swr/immutable"
+import useSWR from "swr"
+import { image1280 } from "@/utils/constants"
 
+let n = 0
 export default function Top() {
 	let { format } = useContext(formatContext)
-	let trending = useSWRImmutable("trending_data", _ => getTrending(format), { suspense: true }).data.results
-	console.log(trending)
+	let trending = useSWR(format, _ => getTrending(format), { suspense: true }).data.results
 
 	return (
-		<div className='flex gap-4 basis-3/6'>
-			<Suspense fallback='ddd'>
-				{trending.slice(2, 4).map((trend, i) => (
-					<HeroMovie key={trend.id} id={trend.id} picture={`https://image.tmdb.org/t/p/w1280/${trend.backdrop_path}`} basis={`${((i + 3) / 7) * 100}%`} format={format} />
-				))}
-			</Suspense>
+		<div className='flex gap-4 basis-3/7 px-8'>
+			{trending.slice(n, n + 2).map((trend, i) => {
+				return <HeroMovie key={trend.id} id={trend.id} format={format} picture={image1280 + trend.backdrop_path} i={i} />
+			})}
 		</div>
 	)
 }
