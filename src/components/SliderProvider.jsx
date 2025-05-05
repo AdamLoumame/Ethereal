@@ -15,7 +15,7 @@ export default function SliderProvider({ id, render }) {
 
 	useEffect(
 		_ => {
-			slider.current.scrollTo({ left: 0, behavior: "smooth" })
+			slider.current.scrollTo({ left: 0 })
 			setShowRight(slider.current?.scrollLeft + slider.current?.clientWidth < slider.current?.scrollWidth)
 		},
 		[id]

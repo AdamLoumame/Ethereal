@@ -15,27 +15,29 @@ export default function Episodes() {
 	let [showModalEpisode, setShowModalEpisode] = useState(false)
 	let [episodeData, setEpisodeData] = useState()
 
-	return (
-		<div>
-			<h1 className='section-title mb-4'>{seasonData.episodes.length} Episodes</h1>
-			<Slider id={data.id} addP>
-				{seasonData.episodes.map((ep, i) => (
-					<div
-						key={ep.id}
-						onClick={_ => {
-							setShowModalEpisode(true)
-							setEpisodeData(ep)
-						}}
-						className='min-w-71 space-y-2 cursor-pointer snap-start'>
-						<LazyImage styles='h-40' src={image300 + ep.still_path} alt={ep.name} />
-						<div className='flex flex-col text-center'>
-							<span className='truncate'>{ep.name}</span>
-							<span className='text-xs opacity-60'>Episode {i + 1}</span>
+	if (seasonData.episodes.length) {
+		return (
+			<div>
+				<h1 className='text-2xl px-14 mb-4'>{seasonData.episodes.length} Episodes</h1>
+				<Slider id={data.id} addP>
+					{seasonData.episodes.map((ep, i) => (
+						<div
+							key={ep.id}
+							onClick={_ => {
+								setShowModalEpisode(true)
+								setEpisodeData(ep)
+							}}
+							className='min-w-71 space-y-4 cursor-pointer snap-start'>
+							<LazyImage styles='h-40' src={image300 + ep.still_path} alt={ep.name} />
+							<div className='flex gap-1 flex-col text-center'>
+								<span className='truncate'>{ep.name}</span>
+								<span className='text-xs opacity-60'>Episode {i + 1}</span>
+							</div>
 						</div>
-					</div>
-				))}
-			</Slider>
-			{showModalEpisode && <ModalEpisodeDetails setShowModalEpisode={setShowModalEpisode} episodeData={episodeData} />}
-		</div>
-	)
+					))}
+				</Slider>
+				{showModalEpisode && <ModalEpisodeDetails setShowModalEpisode={setShowModalEpisode} episodeData={episodeData} />}
+			</div>
+		)
+	}
 }

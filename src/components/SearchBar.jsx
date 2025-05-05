@@ -1,75 +1,50 @@
 import { default as SearchSVG } from "@/assets/icons/search.svg?react"
-import { useEffect, useMemo, useState } from "react"
-import useSWR from "swr"
-import { getSuggestions } from "../services/api"
-import Suggestion from "./Suggestion"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
+import SuggestionsContainer from "./SuggestionsContainer"
+import useWindowClick from "../utils/useWindowClick"
 
-export default function SearchBar({ toggle = false, width, style }) {
+export default function SearchBar({ toggle = false, width, style, fullSearch = false }) {
 	let [appearSearch, setAppearSearch] = useState(!toggle)
-	let [inputValue, setInputValue] = useState()
-	let [activeSuggestion, setActiveSuggestion] = useState(-1)
-
-	let { data: suggestionsData } = useSWR(inputValue, _ => getSuggestions(inputValue))
-	let suggestions = useMemo(_ => suggestionsData?.results.slice(0, 7), [suggestionsData])
+	let [inputValue, setInputValue] = useState("")
+	let [doneSetting, setDoneSetting] = useState(false)
 
 	let navigate = useNavigate()
+	let location = useLocation()
 
-	useEffect(_ => {
-		let hideSearch = e => !document.querySelector(".search-bar")?.contains(e.target) && !document.querySelector(".mode")?.contains(e.target) && setAppearSearch(false)
-		window.addEventListener("click", hideSearch)
-
-		return _ => window.removeEventListener("click", hideSearch)
-	}, [])
-
+	let [searchParams, setSearchParams] = useSearchParams()
 	useEffect(
 		_ => {
-			let handleActive = e => {
-				if (e.code === "ArrowDown") setActiveSuggestion(prev => (prev === suggestions?.length - 1 ? 0 : prev + 1))
-				if (e.code === "ArrowUp") setActiveSuggestion(prev => (prev === 0 ? suggestions?.length - 1 : prev - 1))
-			}
-			document.addEventListener("keydown", handleActive)
-
-			return _ => {
-				setActiveSuggestion(-1)
-				document.removeEventListener("keydown", handleActive)
-			}
+			setInputValue(searchParams.get("q") || "")
+			setDoneSetting(true)
 		},
-		[suggestions]
+		[searchParams.get("q")]
 	)
 
 	useEffect(
 		_ => {
-			let handleSubmit = e => {
-				if (e.code === "Enter") {
-					let activeIndex = activeSuggestion === -1 ? 0 : activeSuggestion
-					navigate(`/${suggestions[activeIndex].media_type}/${suggestions[activeIndex].id}`)
-					setAppearSearch(false)
-					document.querySelector(".search-bar input").blur()
-				}
+			inputValue = inputValue.trim()
+			if (fullSearch && doneSetting && inputValue !== (searchParams.get("q") || "")) {
+				if (!location.pathname.split("/").includes("search")) navigate("/explore/search")
+				setSearchParams(prev => {
+					return { ...Object.fromEntries(prev.entries()), q: inputValue.trim() }
+				})
 			}
-			document.addEventListener("keydown", handleSubmit)
-
-			return _ => document.removeEventListener("keydown", handleSubmit)
 		},
-		[suggestions, activeSuggestion]
+		[inputValue]
 	)
+
+	useWindowClick(e => !document.querySelector(".search-bar")?.contains(e.target) && !document.querySelector(".mode")?.contains(e.target) && setAppearSearch(false))
 
 	return (
-		<div className='relative' onMouseLeave={_ => setActiveSuggestion(-1)}>
-			<div onClick={_ => setAppearSearch(true)} className={`${style} search-bar h-fit p-2 mr-1 flex items-center rounded-full duration-300`}>
-				<input type='text' className={`${(!toggle || appearSearch) && `${width} mx-2`} duration-300 w-0`} onInput={e => setInputValue(e.target.value)} />
+		<div className='relative' onClick={_ => setAppearSearch(true)}>
+			<div className={`${style} search-bar h-fit p-2 mr-1 flex items-center rounded-full duration-300`}>
+				<input type='text' className={`${(!toggle || appearSearch) && `${width} mx-2`} duration-300 w-0`} value={inputValue} onInput={e => setInputValue(e.target.value)} />
 				<div className='cursor-pointer'>
 					<SearchSVG />
 				</div>
 			</div>
-			{appearSearch && (
-				<div className={`${style} flex flex-col absolute top-[110%] left-0 w-full rounded-3xl overflow-hidden z-100 overflow-y-auto scrolly`}>
-					{suggestions?.map((suggestion, i) => (
-						<Suggestion key={suggestion.id} data={suggestion} setActiveSuggestion={setActiveSuggestion} active={activeSuggestion === i} i={i} />
-					))}
-				</div>
-			)}
+			{appearSearch && !fullSearch && <SuggestionsContainer inputValue={inputValue} style={style} setAppearSearch={setAppearSearch} />}
 		</div>
 	)
 }

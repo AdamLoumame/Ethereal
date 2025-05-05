@@ -9,7 +9,7 @@ import { default as FilledStar3SVG } from "@/assets/icons/filledstar3.svg?react"
 import Menu from "./Menu"
 import { useEffect, useState } from "react"
 
-export default function Footer() {
+export default function Footer({ style }) {
 	let [showStar, setShowStar] = useState(false)
 	let [left, setLeft] = useState(0)
 	let randStarN = Math.floor(Math.random() * 3)
@@ -21,7 +21,7 @@ export default function Footer() {
 	)
 
 	return (
-		<div className='frost2 h-[60vh] overflow-hidden mt-25 border-t-1'>
+		<div className={`${style} h-[60vh] overflow-hidden mt-25 border-t-1`}>
 			<div className='absolute top-0 right-0 w-1/3 pt-14 pr-14 gap-40 flex justify-start'>
 				<div className='flex flex-col gap-2'>
 					<Menu activeClass='hidden' elClass='text-sm' iconClass='hidden' />
@@ -32,14 +32,14 @@ export default function Footer() {
 							<a href={s.link} className='group cursor-pointer text-inherit relative w-fit'>
 								{s.name}
 								<div className='absolute overflow-hidden w-full h-[.5px] top-full left-0'>
-									<div className='absolute h-full w-full group-hover:translate-x-full -translate-x-full group-hover:duration-300 bg-[#e8e5f0] ease' />
+									<div className='absolute h-full w-full group-hover:translate-x-full -translate-x-full group-hover:duration-300 in-[.no-mode]:bg-textDark dark:bg-textDark bg-textLight ease' />
 								</div>
 							</a>
 						</span>
 					))}
 				</div>
 			</div>
-			<span className='absolute -translate-1/2 top-0 left-0 size-200 rounded-full border-1 border-light' />
+			<span className='absolute -translate-1/2 top-0 left-0 size-200 rounded-full border-1 border-inherit	' />
 			<span className='absolute bottom-0 right-0 pr-14 pb-14 w-1/3'>
 				<LogoLettersSVG />
 			</span>

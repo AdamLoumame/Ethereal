@@ -8,7 +8,7 @@ export default function Seasons() {
 
 	return (
 		<div className='space-y-4'>
-			<h1 className='section-title'>
+			<h1 className='text-2xl px-14'>
 				{data.seasons.length} Season{data.seasons.length > 1 && "s"}
 			</h1>
 			<Slider id={data.id} addP>

@@ -1,8 +1,9 @@
 import Header from "./Header"
 import Top from "./Top"
 import Genres from "./Genres"
-import Trend from "../../../components/Trend"
+import Trend from "@/components/Trend"
 import { createContext, useState, Suspense } from "react"
+import Loader from "../../../components/Loader"
 
 export let formatContext = createContext(null)
 export let genreContext = createContext(null)
@@ -15,11 +16,16 @@ export default function Dashboard() {
 		<div className='basis-4/5 max-w-4/5 z-10 flex flex-col gap-4'>
 			<formatContext.Provider value={{ format, setFormat }}>
 				<Header />
-				<Suspense fallback={"qsfsdf"}>
+				<Suspense
+					fallback={
+						<div className='flex-center	h-full'>
+							<Loader />
+						</div>
+					}>
 					<Top />
 					<genreContext.Provider value={{ genre, setGenre }}>
 						<Genres />
-						<Trend title={`Trending ${genre[format].id ? `In ${genre[format].name}` : ""}`} format={format} genreId={genre[format].id} />
+						<Trend title={`Trending ${genre[format].id ? `In ${genre[format].name}` : ""}`} format={format} genre={genre[format]} />
 					</genreContext.Provider>
 				</Suspense>
 			</formatContext.Provider>

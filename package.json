@@ -12,7 +12,7 @@
 	"dependencies": {
 		"@re-dev/react-truncate": "^0.5.0",
 		"@tailwindcss/vite": "^4.0.0",
-		"fast-average-color": "^9.4.0",
+		"fast-average-color": "^9.5.0",
 		"gsap": "^3.12.7",
 		"node-vibrant": "^4.0.3",
 		"nprogress": "^0.2.0",

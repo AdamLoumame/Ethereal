@@ -9,7 +9,7 @@ import ModalVideo from "@/components/ModalVideo"
 
 export default function HeroMovie({ id, picture, format, i }) {
 	let { data } = useSWR(`data${id}`, _ => getById(id, format), { suspense: true })
-	let { data: color } = useSWR(`color${id}`, _ => getAvrColor(picture), { suspense: true })
+	let color = useSWR(`color${id}`, _ => getAvrColor(picture), { suspense: true }).data
 	let { data: trailer } = useSWR(`trailer${id}`, _ => getVideos(id, format), { suspense: true })
 	trailer = trailer.filter(vid => vid.type === "Trailer")
 	let [showVideo, setShowVideo] = useState(false)
@@ -55,7 +55,7 @@ export default function HeroMovie({ id, picture, format, i }) {
 						</span>
 						Play The Trailer
 					</div>
-				)}{" "}
+				)}
 				{showVideo && <iframe onLoad={e => setHideImage(true)} src={`https://www.youtube.com/embed/${trailer[0].key}?autoplay=1&loop=1&controls=0&playlist=${trailer[0].key}&mute=1`} allow='autoplay; encrypted-media' allowFullScreen className='absolute left-0 h-[300%] w-[120%] top-1/2 -translate-y-1/2' />}
 				<img src={picture} className={`absolute ${i === 0 ? "h-full" : "h-[110%]"} ${hideImage && "opacity-0"} duration-500 top-0 right-0`} />
 			</Link>

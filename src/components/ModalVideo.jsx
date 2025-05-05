@@ -28,6 +28,11 @@ export default function ModalVideo({ setShowVideo, vidId }) {
 	)
 	useModal()
 
+	useEffect(_ => {
+		document.addEventListener("keydown", _ => setPlaying(prev => !prev))
+		return _ => document.removeEventListener("keydown", _ => setPlaying(prev => !prev))
+	}, [])
+
 	return (
 		<div className='fixed left-0 top-0 size-full z-250 flex-center cursor-default text-light bg-[#000000B3]' onClick={_ => setShowVideo(false)}>
 			<div className='relative h-160 w-285 overflow-hidden bg-black' ref={videoRef} onClick={e => e.stopPropagation()}>
@@ -51,7 +56,7 @@ export default function ModalVideo({ setShowVideo, vidId }) {
 					/>
 				</div>
 				<div className='absolute w-full bottom-0 left-0 px-6 pb-6 flex flex-col'>
-					<ProgressBar name='sound-progress' changingDep={duration} progress={progress} setProgress={setProgress} goToProgress={time => playerRef.current.seekTo(time, "seconds")} smooth />
+					<ProgressBar name='sound-progress' changingDep={duration} progress={progress} setProgress={setProgress} goToProgress={time => playerRef.current.seekTo(time, "seconds")} smooth downOperation={_ => setPlaying(false)} upOperation={_ => setPlaying(true)} />
 					<div className='flex justify-between text-sm mt-4'>
 						<span>{formatTime(progress)}</span>
 						<span>{formatTime(duration)}</span>

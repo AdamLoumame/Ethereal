@@ -1,19 +1,19 @@
-import { useContext } from "react"
+import { Suspense, useContext, useMemo } from "react"
 import HeroMovie from "./HeroMovie"
-import { getTrending } from "@/services/api.js"
+import { getDetails } from "@/services/api.js"
 import { formatContext } from "./Dashboard"
 import useSWR from "swr"
-import { image1280 } from "@/utils/constants"
+import { image780 } from "../../../utils/constants"
 
-let n = 0
 export default function Top() {
 	let { format } = useContext(formatContext)
-	let trending = useSWR(format, _ => getTrending(format), { suspense: true }).data.results
+	let n = useMemo(_ => Math.floor(Math.random() * 18), [])
+	let trending = useSWR(format, _ => getDetails(format), { suspense: true }).data.results
 
 	return (
 		<div className='flex gap-4 basis-3/7 px-8'>
 			{trending.slice(n, n + 2).map((trend, i) => {
-				return <HeroMovie key={trend.id} id={trend.id} format={format} picture={image1280 + trend.backdrop_path} i={i} />
+				return <HeroMovie key={trend.id} id={trend.id} format={format} picture={image780 + trend.backdrop_path} i={i} />
 			})}
 		</div>
 	)

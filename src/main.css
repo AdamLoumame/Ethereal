@@ -21,7 +21,17 @@
 	--color-textDark: var(--text-dark);
 	--color-light: var(--light);
 	--color-textLight: var(--text-light);
+	--animate-scale: scale 1s infinite;
+	@keyframes scale {
+		0%, 100% {
+		  transform: scale(0);
+		}
+		50% {
+		  transform: scale(1.3);
+		}
+	  }
 }
+
 
 @font-face {
 	font-family: "Roboto";
@@ -37,7 +47,7 @@ iframe {
 }
 body {
 	font-family: "Roboto", serif;
-	@apply dark:bg-dark dark:text-textDark bg-light text-textLight overflow-hidden;
+	@apply dark:bg-dark dark:text-textDark bg-light text-textLight;
 }
 body.modal-on{
 	@apply !overflow-hidden 	
@@ -100,7 +110,7 @@ body:has(.no-mode) .button.active,body:has(.no-mode) .button:hover,body:has(.no-
 	@apply border-1 dark:bg-light dark:text-textLight text-textDark bg-dark duration-300;
 }
 .button.active,.button:hover{
-	@apply dark:text-textDark dark:border-light text-textLight border-dark;  
+	@apply dark:text-textDark dark:border-light text-textLight border-textLight;  
 }
 .genre.active,.genre:hover{
 	backdrop-filter: unset !important;
@@ -114,9 +124,6 @@ body:has(.no-mode) .button.active,body:has(.no-mode) .button:hover,body:has(.no-
 }
 .slider-parent:hover .slider-button-icon{
 	@apply opacity-100 scale-100;
-}
-.section-title{
-	@apply text-2xl px-14 font-medium;
 }
 .tooltip::before{
 	content: "";
@@ -139,16 +146,10 @@ div:has(.tooltip):hover > .tooltip{
 	overflow-x: scroll;
 	scroll-snap-type: x mandatory;
 }
-.scrolly {
-	-ms-overflow-style: none;
-	scrollbar-width: none; 
-	overflow-x: scroll;
-	scroll-snap-type: y mandatory;
-}
 
 .lazy-img-loaded {
 	opacity: 1;
-	transform: scale(1);
+	scale: 1;
 }
 .link .line{
 	width: 0;
@@ -161,6 +162,22 @@ div:has(.tooltip):hover > .tooltip{
 }
 .episode-image{
 	mask-image: linear-gradient(to bottom, black 20%, transparent 70%);
+}
+
+#nprogress > .bar {
+	background-color: var(--text-light) !important;
+	transition: .5s;
+	height: 3px !important ;
+}
+.dark #nprogress > .bar ,
+body:has(.no-mode) #nprogress > .bar {
+ background-color: var(--light) !important;
+}
+#nprogress .peg{
+	box-shadow: none !important;
+}
+.filter-options{
+	transition:  .3s ;
 }
 /* animations */
 @keyframes noise {
@@ -204,8 +221,7 @@ div:has(.tooltip):hover > .tooltip{
 }
 .frost2,
 .mute-button::before,
-.suggestion.active,
-.header-el:hover{
+.suggestion.active{
 	background: rgba(0, 0, 0, 0.25);
 	backdrop-filter: blur(8.5px);
 	-webkit-backdrop-filter: blur(8.5px);

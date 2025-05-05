@@ -3,7 +3,6 @@ import { dataContext } from "./Synopsis"
 import { image780 } from "@/utils/constants"
 import LazyImage from "@/components/LazyImage"
 import Stars from "@/components/Stars"
-import { default as AddWatchlistSVG } from "@/assets/icons/addwatchlist.svg?react"
 import { default as PlaySVG } from "@/assets/icons/play.svg?react"
 import { default as CurvedCornerSVG } from "@/assets/icons/curvedcorner.svg?react"
 import Tooltip from "@/components/Tooltip"
@@ -19,8 +18,9 @@ import ModalVideo from "@/components/ModalVideo"
 import useSWR from "swr"
 import { getVideos } from "@/services/api"
 import { formatDate, formatYears } from "@/utils/utils"
+import WatchlistButton from "../../components/WatchlistButton"
 
-export default function MainOverview({ setisImgLoaded }) {
+export default function MainOverview() {
 	let { data, format, seasonN } = useContext(dataContext)
 	let title = data.title || data.name
 	let date = data.release_date || data.first_air_date || data.air_date
@@ -28,18 +28,19 @@ export default function MainOverview({ setisImgLoaded }) {
 	let cert = useMemo(_ => data?.release_dates?.results.filter(d => d.iso_3166_1 === "US")[0]?.release_dates.filter(d => d.certification)[0]?.certification, [data])
 	let director = useMemo(_ => data?.credits?.crew.filter(menber => menber.job === "Director")[0]?.original_name, [data])
 
+	let person = format === "person"
+
 	let [showGenres, setShowGenres] = useState(data.genres?.length <= 2)
 	useEffect(_ => setShowGenres(data.genres?.length <= 2), [data])
 
 	let [showVideo, setShowVideo] = useState(false)
-	let { data: trailer } = useSWR(`trailer${data.id + (seasonN || "")}`, _ => getVideos(data.id, format, seasonN), { suspense: true })
+	let { data: trailer } = useSWR(!person && `trailer${data.id + (seasonN || "")}`, _ => getVideos(data.id, format, seasonN), { suspense: true })
 	trailer = trailer?.filter(vid => vid.type === "Trailer")
 
-	let person = format === "person"
 	return (
 		<>
-			<div className='flex relative gap-8 px-14'>
-				<LazyImage styles='min-w-80 w-80 h-120 shadow-lg hover:!rounded-3xl' src={image780 + (data.poster_path || data.profile_path)} alt={title} loadOp={_ => setisImgLoaded(true)} />
+			<div className='flex relative gap-8 px-14 mt-12'>
+				<LazyImage styles='min-w-80 w-80 h-120 shadow-lg hover:!rounded-3xl' src={image780 + (data.poster_path || data.profile_path)} alt={title} />
 				<div className='py-2 grow'>
 					<h1 className='text-4xl font-semibold'>{title}</h1>
 					<span className='opacity-60 text-sm'>
@@ -58,7 +59,7 @@ export default function MainOverview({ setisImgLoaded }) {
 						{cert && <span className='frost rounded-2xl p-2 my-4'>{cert}</span>}
 						{data.episode_count && <span className='frost rounded-2xl px-3 py-2 my-4'> {data.episode_count} Episodes</span>}
 						{date && <span className='my-4'> {date.slice(0, 4)}</span>}
-						{runtime && <span className='my-4'>{`${runtime > 59 ? `${Math.floor(runtime / 60)}h` : ""} ${runtime % 60 !== 0 ? `${runtime % 60}m` : ""}`}</span>}
+						{runtime && <span className='my-4'>{`${runtime > 59 ? `${Math.floor(runtime / 60)}h` : ""} ${runtime % 60 !== 0 ? `${runtime % 60}min` : ""}`}</span>}
 						<div>
 							{data.genres?.slice(0, showGenres ? undefined : 2).map((genre, i) => (
 								<span key={genre.id} className='opacity-70 my-4'>
@@ -112,12 +113,7 @@ export default function MainOverview({ setisImgLoaded }) {
 					)}
 					{!person && (
 						<div className='flex my-7 gap-3'>
-							<div className='button flex items-center gap-2.5 active cursor-pointer font-semibold rounded-3xl w-fit p-4'>
-								<div className='w-5'>
-									<AddWatchlistSVG />
-								</div>
-								Add To Watchlist
-							</div>
+							<WatchlistButton id={data.id} format={format} />
 							{trailer[0] && (
 								<div
 									className='rounded-full button active p-4 cursor-pointer'
@@ -135,7 +131,7 @@ export default function MainOverview({ setisImgLoaded }) {
 					<ExpandableText text={data.overview || data.biography} />
 				</div>
 				{data.belongs_to_collection && (
-					<div className='collection group absolute top-0 right-14 h-20'>
+					<div className='collection group absolute top-0 right-14 h-20 z-30'>
 						<div className='group-hover:rounded-b-none flex ease items-center relative frost duration-220 border-transparent p-4 rounded-3xl grow w-fit'>
 							<h2 className='name opacity-0 text-xl overflow-hidden text-left whitespace-nowrap max-w-0'>{data.belongs_to_collection.name}</h2>
 							<span className='group-hover:opacity-100 absolute bottom-0 right-full opacity-0 duration-200 text-[#FFFFFF0D] rotate-180'>

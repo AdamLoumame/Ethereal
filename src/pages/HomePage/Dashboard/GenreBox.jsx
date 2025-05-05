@@ -1,5 +1,6 @@
 import { lazy, Suspense, useContext } from "react"
 import { genreContext } from "./Dashboard"
+import { capitalize } from "../../../utils/utils"
 
 export default function GenreBox({ genre, format }) {
 	let { genre: activeGenre, setGenre } = useContext(genreContext)
@@ -19,7 +20,7 @@ export default function GenreBox({ genre, format }) {
 					<SVG />
 				</span>
 			</Suspense>
-			<h1>{name.charAt(0).toUpperCase() + name.slice(1)}</h1>
+			<h1>{capitalize(name)}</h1>
 		</div>
 	)
 }
