@@ -38,7 +38,7 @@ export default function HeroMovie({ id, picture, format, i }) {
 			<Link
 				to={`/${format}/${id}`}
 				ref={boxRef}
-				className={`before:absolute before:inset-0 before:h-full before:w-full before:z-[11] before:bg-inherit before:opacity-20 relative rounded-3xl overflow-hidden duration-300 hover:scale-102  cursor-pointer ${color.isDark ? "text-textDark" : "text-textLight"}`}
+				className={`before:absolute before:inset-0 before:h-full before:w-full before:z-[11] before:bg-inherit before:opacity-20 relative rounded-3xl overflow-hidden duration-300 cursor-pointer ${color.isDark ? "text-textDark" : "text-textLight"}`}
 				style={{ flexBasis: `${((i + 3) / 7) * 100}%`, backgroundColor: color.hex }}>
 				<div className='absolute z-10 w-2/3 pl-6 py-4 h-full' style={{ background: `linear-gradient(to right, ${color.hex} 60%, transparent)` }}>
 					<h2 className='text-3xl [word-spacing:0.1rem] absolute top-4 h-8/10 w-3/4'>{(data.tagline.length <= 50 && data.tagline.slice(0, -1)) || data.title || data.name}</h2>

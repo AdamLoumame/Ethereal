@@ -11,7 +11,7 @@ export default function Top() {
 	let trending = useSWR(format, _ => getDetails(format), { suspense: true }).data.results
 
 	return (
-		<div className='flex gap-4 basis-3/7 px-8'>
+		<div className='flex gap-4 basis-3/7 px-8 max-lg:h-70'>
 			{trending.slice(n, n + 2).map((trend, i) => {
 				return <HeroMovie key={trend.id} id={trend.id} format={format} picture={image780 + trend.backdrop_path} i={i} />
 			})}

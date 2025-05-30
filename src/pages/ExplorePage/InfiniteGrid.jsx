@@ -75,14 +75,13 @@ export default function InfiniteGrid({ observedEl, format, type, id }) {
 		},
 		[done, items[0]]
 	)
-	console.log(items)
 
 	return (
 		<div className='flex flex-wrap gap-y-8 max-w-fit px-auto px-14 min-w-full'>
 			{items.map(el => (
 				<TrendBox key={el.id} trend={el} format={format} largest />
 			))}
-			{isLoading && <Loader />}
+			{(isLoading || ((searchParams.get("genre") || searchParams.get("period")) && !done)) && <Loader />}
 			{!items.length && done && "No results found"}
 		</div>
 	)

@@ -12,7 +12,7 @@ export default function LazyImage({
 }) {
 	return (
 		<div className={`${styles} bg-[#00000080] group-hover:rounded-none duration-300 rounded-3xl overflow-hidden relative z-10 flex-center text-light`}>
-			{src.includes("null") || src.includes("undefined") ? <FallBack /> : <img key={src} loading='lazy' src={src} alt={alt} className='absolute inset-0 opacity-0 size-full duration-300 ease-in-out group-hover:scale-105' onLoad={e => e.target.classList.add("lazy-img-loaded")} />}
+			{src.includes("null") || src.includes("undefined") ? <FallBack /> : <img key={src} loading='lazy' src={src} alt={alt} className='absolute inset-0 opacity-0 size-full duration-300 ease-in-out group-hover:scale-105 max-w-full' onLoad={e => e.target.classList.add("lazy-img-loaded")} />}
 		</div>
 	)
 }

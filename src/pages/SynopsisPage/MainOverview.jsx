@@ -42,7 +42,7 @@ export default function MainOverview() {
 			<div className='flex relative gap-8 px-14 mt-12'>
 				<LazyImage styles='min-w-80 w-80 h-120 shadow-lg hover:!rounded-3xl' src={image780 + (data.poster_path || data.profile_path)} alt={title} />
 				<div className='py-2 grow'>
-					<h1 className='text-4xl font-semibold'>{title}</h1>
+					<h1 className='text-4xl font-semibold max-w-[50vw]'>{title}</h1>
 					<span className='opacity-60 text-sm'>
 						{director && `Directed by ${director}`}
 						{data.known_for_department && `Known For ${data.known_for_department}`}
@@ -113,7 +113,7 @@ export default function MainOverview() {
 					)}
 					{!person && (
 						<div className='flex my-7 gap-3'>
-							<WatchlistButton id={data.id} format={format} />
+							{!seasonN && <WatchlistButton id={data.id} format={format} />}
 							{trailer[0] && (
 								<div
 									className='rounded-full button active p-4 cursor-pointer'
@@ -131,17 +131,17 @@ export default function MainOverview() {
 					<ExpandableText text={data.overview || data.biography} />
 				</div>
 				{data.belongs_to_collection && (
-					<div className='collection group absolute top-0 right-14 h-20 z-30'>
-						<div className='group-hover:rounded-b-none flex ease items-center relative frost duration-220 border-transparent p-4 rounded-3xl grow w-fit'>
+					<div className='collection group/grandparent absolute top-0 right-14 h-20 z-100'>
+						<div className='group-hover/grandparent:rounded-b-none flex ease items-center relative frost duration-220 border-transparent p-4 rounded-3xl grow w-fit'>
 							<h2 className='name opacity-0 text-xl overflow-hidden text-left whitespace-nowrap max-w-0'>{data.belongs_to_collection.name}</h2>
-							<span className='group-hover:opacity-100 absolute bottom-0 right-full opacity-0 duration-200 text-[#FFFFFF0D] rotate-180'>
+							<span className='group-hover/grandparent:opacity-100 absolute bottom-0 right-full opacity-0 duration-200 text-[#FFFFFF0D] rotate-180'>
 								<CurvedCornerSVG />
 							</span>
 							<span className='size-7'>
 								<CollectionSVG />
 							</span>
 						</div>
-						<div className='collection-content group-hover:opacity-100 group-hover:scale-100 group-hover:rounded-tr-none duration-300 opacity-0 scale-0 py-4 rounded-3xl right-0 frost absolute top-15 max-w-[60vw]'>
+						<div className='collection-content group-hover/grandparent:opacity-100 group-hover/grandparent:scale-100 group-hover/grandparent:rounded-tr-none duration-300 opacity-0 scale-0 py-4 rounded-3xl right-0 frost absolute top-15 max-w-[60vw]'>
 							<Trend format={format} collectionId={data.belongs_to_collection.id} />
 						</div>
 					</div>

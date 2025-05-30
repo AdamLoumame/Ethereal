@@ -7,9 +7,11 @@
 
 *{
 	scroll-behavior:smooth;
+	interpolate-size: allow-keywords;
 }
 /* Customs */
 :root {
+	interpolate-size: allow-keywords;
 	--dark: #0e1012;
 	--sec-dark: #343434;
 	--text-dark: #f3f6fa;
@@ -17,11 +19,17 @@
 	--text-light: #1a4572;
 }
 @theme {
+	--text-13xl: 15rem;
 	--color-dark: var(--dark);
 	--color-textDark: var(--text-dark);
 	--color-light: var(--light);
 	--color-textLight: var(--text-light);
 	--animate-scale: scale 1s infinite;
+	--breakpoint-sm: 680px;
+	--breakpoint-md: 769px;
+	--breakpoint-lg: 1050px;
+	--breakpoint-3xl: 1920px;
+	--breakpoint-4xl: 2560px;
 	@keyframes scale {
 		0%, 100% {
 		  transform: scale(0);
@@ -38,6 +46,27 @@
 	src: url("./assets/Roboto-VariableFont_wdth\,wght.ttf") format("truetype");
 	font-style: normal;
 	font-display: swap;
+}
+
+html{
+@apply max-md:!text-[12px] max-lg:!text-[13px] max-xl:text-[15px] max-2xl:text-base max-3xl:text-xl max-4xl:text-2xl 4xl:text-3xl
+}
+
+.text-stroke{
+	-webkit-text-stroke:3px var(--text-light);
+	color: transparent;
+}
+.text-stroke-md{
+	-webkit-text-stroke:2px var(--text-light);
+	color: transparent;	
+}
+.text-stroke-ms{
+	-webkit-text-stroke:1px var(--text-light);
+	color: transparent;	
+}
+
+.dark .text-stroke{
+	-webkit-text-stroke:3px var(--text-dark);
 }
 input:focus {
 	outline: none;
@@ -82,7 +111,7 @@ body:has(.no-mode) .button.active,body:has(.no-mode) .button:hover,body:has(.no-
 	flex: none;
 	height: 100%;
 	width: 100%;
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 }
@@ -178,6 +207,9 @@ body:has(.no-mode) #nprogress > .bar {
 }
 .filter-options{
 	transition:  .3s ;
+}
+body:has(.error-page) #nprogress{
+	display: none;
 }
 /* animations */
 @keyframes noise {

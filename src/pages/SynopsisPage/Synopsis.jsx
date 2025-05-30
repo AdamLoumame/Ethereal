@@ -1,5 +1,5 @@
 import useSWR from "swr"
-import { createContext, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 import MainOverview from "./MainOverview"
 import Cast from "./Cast"
 import { getPalette } from "@/utils/utils"
@@ -14,17 +14,21 @@ import Footer from "@/components/Footer"
 import Reviews from "./Reviews"
 import PersonCredits from "./PersonCredits"
 import Episodes from "./Episodes"
+import useLocalStorage from "../../utils/useLocalStorage"
 
 export let dataContext = createContext(null)
 export default function Synopsis() {
 	let { data, format, seasonN } = useLoaderData()
 	let { data: colors } = useSWR((data.poster_path || data.profile_path) && `colors${data.id + format + (seasonN || "")}`, _ => getPalette(image780 + (data.poster_path || data.profile_path), Math.random() < 0.5), { suspense: true })
 
+	let [_, setLastBrowsed] = useLocalStorage("lastbrowsed", [])
+	useEffect(_ => setLastBrowsed(prev => (format === "tv" || format === "movie") && [...prev.filter(el => el.id !== data.id), { id: data.id, format }].slice(-3)), [Number(data.id) + format])
+
 	return (
 		<div className='no-mode'>
 			<ScrollTop />
 			<Bg colors={colors?.DarkVibrant && [colors.DarkVibrant.hex, colors.Vibrant.hex, colors.Muted.hex, colors.DarkMuted.hex]} />
-			<Head style='frost2' />
+			<Head searchStyle='frost2' />
 			<div className='flex flex-col gap-12'>
 				<dataContext.Provider value={{ data, format, seasonN }}>
 					<MainOverview />

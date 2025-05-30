@@ -29,8 +29,8 @@ export default function ModalVideo({ setShowVideo, vidId }) {
 	useModal()
 
 	useEffect(_ => {
-		document.addEventListener("keydown", _ => setPlaying(prev => !prev))
-		return _ => document.removeEventListener("keydown", _ => setPlaying(prev => !prev))
+		document.addEventListener("keydown", e => e.code === "Space" && setPlaying(prev => !prev))
+		return _ => document.removeEventListener("keydown", _ => e.code === "Space" && setPlaying(prev => !prev))
 	}, [])
 
 	return (

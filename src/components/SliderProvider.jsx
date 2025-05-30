@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 
-export default function SliderProvider({ id, render }) {
+export default function SliderProvider({ id, deps, render }) {
 	let slider = useRef(null)
 	let [showLeft, setShowLeft] = useState(false)
 	let [showRight, setShowRight] = useState(false)
@@ -18,13 +18,14 @@ export default function SliderProvider({ id, render }) {
 			slider.current.scrollTo({ left: 0 })
 			setShowRight(slider.current?.scrollLeft + slider.current?.clientWidth < slider.current?.scrollWidth)
 		},
-		[id]
+		[id, deps]
 	)
 
 	useEffect(_ => {
 		slider.current.addEventListener("scroll", _ => {
 			let { scrollLeft, clientWidth, scrollWidth } = slider.current
 			setShowRight(scrollLeft + clientWidth < scrollWidth)
+
 			setShowLeft(scrollLeft > 10)
 		})
 	}, [])

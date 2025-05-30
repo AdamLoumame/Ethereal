@@ -3,6 +3,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
 import "nprogress/nprogress.css"
 import { getById } from "./services/api"
 import useLoader from "./utils/useLoader"
+import ErrorPage from "./components/ErrorPage"
 
 let Home = lazy(_ => import("./pages/HomePage/Home"))
 let Watchlist = lazy(_ => import("./pages/WatchlistPage/Watchlist"))
@@ -18,6 +19,7 @@ let router = createBrowserRouter([
 	{
 		element: <Route />,
 		path: "/",
+		errorElement:<ErrorPage/>,
 		children: [
 			{ index: true, element: <Home /> },
 			{ path: "watchlist", element: <Watchlist /> },

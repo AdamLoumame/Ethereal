@@ -4,7 +4,7 @@ import useSWR from "swr"
 import Suggestion from "./Suggestion"
 import { getSuggestions } from "../services/api"
 
-export default function SuggestionsContainer({ inputValue, style, setAppearSearch }) {
+export default function SuggestionsContainer({ inputValue, style, setAppearSearch, location, setLastUrl }) {
 	let [activeSuggestion, setActiveSuggestion] = useState(-1)
 	let { data: suggestionsData } = useSWR(inputValue, _ => getSuggestions(inputValue))
 	let suggestions = useMemo(_ => suggestionsData?.results.slice(0, 7), [suggestionsData])
@@ -32,6 +32,7 @@ export default function SuggestionsContainer({ inputValue, style, setAppearSearc
 			let handleSubmit = e => {
 				if (e.code === "Enter" && inputValue) {
 					let activeIndex = activeSuggestion === -1 ? 0 : activeSuggestion
+					setLastUrl(location.pathname)
 					navigate((suggestionsData?.results.length > 7 && activeSuggestion === -1) || !suggestions?.length ? `/explore/search?q=${inputValue}` : `/${suggestions[activeIndex].media_type}/${suggestions[activeIndex].id}`)
 					setAppearSearch(false)
 					document.querySelector(".search-bar input").blur()

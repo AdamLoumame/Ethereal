@@ -1,7 +1,7 @@
-import { useEffect } from "react"
+import { useLayoutEffect } from "react"
 
 export default function useWindowClick(hideSearch) {
-	useEffect(_ => {
+	useLayoutEffect(_ => {
 		window.addEventListener("click", hideSearch)
 		return _ => window.removeEventListener("click", hideSearch)
 	}, [])

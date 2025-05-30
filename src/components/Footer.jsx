@@ -8,8 +8,9 @@ import { default as StrokeStar3SVG } from "@/assets/icons/strokestar3.svg?react"
 import { default as FilledStar3SVG } from "@/assets/icons/filledstar3.svg?react"
 import Menu from "./Menu"
 import { useEffect, useState } from "react"
+import Copyright from "./Copyright"
 
-export default function Footer({ style }) {
+export default function Footer({ style =""}) {
 	let [showStar, setShowStar] = useState(false)
 	let [left, setLeft] = useState(0)
 	let randStarN = Math.floor(Math.random() * 3)
@@ -21,7 +22,7 @@ export default function Footer({ style }) {
 	)
 
 	return (
-		<div className={`${style} h-[60vh] overflow-hidden mt-25 border-t-1`}>
+		<div className={`${style} h-[60vh] overflow-hidden mt-25 border-t-1 relative`}>
 			<div className='absolute top-0 right-0 w-1/3 pt-14 pr-14 gap-40 flex justify-start'>
 				<div className='flex flex-col gap-2'>
 					<Menu activeClass='hidden' elClass='text-sm' iconClass='hidden' />
@@ -47,14 +48,8 @@ export default function Footer({ style }) {
 				<span className='size-7/5 absolute ease top-1/2 left-1/2 -translate-1/2'>{[<StrokeStar1SVG key='1' />, <StrokeStar2SVG key='2' />, <StrokeStar3SVG key='3' />][randStarN]}</span>
 				<span className={`${showStar && "top-7/20 left-3/4 duration-800"} size-7/5 absolute ease top-1/2 left-1/2 -translate-1/2`}>{[<FilledStar1SVG key='1' />, <FilledStar2SVG key='2' />, <FilledStar3SVG key='3' />][randStarN]}</span>
 			</div>
-			<div className='absolute bottom-13.5 left-100 text-sm max-w-1/3 space-y-2'>
-				<p>© 2025 Adam Loumame. All rights reserved.</p>
-				<p>
-					Designed and built by me, data provided by
-					<a href='https://www.themoviedb.org' target='blank' className='ml-2 rounded-3xl font-semibold'>
-						TMDB
-					</a>
-				</p>
+			<div className='absolute bottom-13.5 left-100 max-lg:left-14 text-sm max-w-1/3 space-y-2'>
+				<Copyright />
 			</div>
 		</div>
 	)

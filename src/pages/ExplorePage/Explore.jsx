@@ -1,4 +1,4 @@
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
 import Head from "../../components/Head"
 import Footer from "../../components/Footer"
 import { Suspense, useEffect, useMemo, useRef, useState } from "react"
@@ -8,22 +8,26 @@ import { capitalize, toggleParam } from "../../utils/utils"
 import { getGenre } from "../../services/api"
 import useSWR from "swr"
 import { default as FilledStar3SVG } from "@/assets/icons/filledstar3.svg?react"
+import { default as ResetSVG } from "@/assets/icons/reset.svg?react"
 import useWindowClick from "../../utils/useWindowClick"
 import { formats, periods } from "../../utils/constants"
 import ScrollToTop from "../../components/ScrollTop"
 import MainExploreHighlight from "./MainExploreHighlight"
 import Trend from "../../components/Trend"
 import Loader from "../../components/Loader"
+import useLocalStorage from "../../utils/useLocalStorage"
 
 export default function Explore() {
 	let { format, type, typeName, id } = useParams()
 	let footerRef = useRef(null)
 
+	let [lastUrl] = useLocalStorage("lastUrl", "/explore")
 	let navigate = useNavigate()
+	let location = useLocation()
 	let [searchParams, setSearchParams] = useSearchParams()
 	useEffect(
 		_ => {
-			if (!searchParams.get("q") && format === "search") navigate("/explore")
+			if (!searchParams.get("q") && format === "search") navigate(lastUrl)
 		},
 		[searchParams.get("q")]
 	)
@@ -47,60 +51,66 @@ export default function Explore() {
 
 	let genres = useSWR(`genre${searchParams.get("format")}`, _ => getGenre(searchParams.get("format")), { suspense: true }).data.genres
 	return (
-		<>
-			<ScrollToTop />
-			<div className='noise fixed inset-0 size-full' />
-			<Head fullSearch style='border-1 frost border-inherit' mode />
-			{!format && (
-				<div className='space-y-15'>
-					<Suspense
-						fallback={
-							<div className='flex-center h-120'>
-								<Loader />
-							</div>
-						}>
-						<MainExploreHighlight />
-					</Suspense>
-					<Trend title='Trending Movies' format='movie' large addP />
-					<Trend title='Trending TV Shows' format='tv' large addP />
-					<Trend title='Top Rated Movies' format='movie' large addP topRated />
-					<Trend title='Top Rated TV Shows' format='tv' large addP topRated />
-					<Trend title='Upcomming Movies' format='movie' large addP upcoming />
-					<Trend title='Now Playing Movies' format='movie' large addP nowPlaying />
-					<Trend title='Airing TV Shows' format='tv' large addP airing />
-				</div>
-			)}
-			{format === "search" && (
-				<div className='flex gap-2 frost z-100 items-center py-4 px-5 sticky top-30 border-1 rounded-4xl mb-10 mx-14 mt-12'>
-					<FilterOption option='genre' filters={genres} fallback={"chose a format to change the genre"} />
-					<FilterOption option='format' filters={formats} />
-					<FilterOption option='period' filters={searchParams.get("format") !== "person" ? periods : undefined} fallback={"change  person"} />
-					<div ref={filterNumberRef} className='relative size-11 ml-auto'>
-						<span
-							className={`button active size-full flex-center cursor-pointer rounded-full before:size-8/10 before:rounded-full before:absolute before:inset-1/2 before:hidden before:-translate-1/2 before:outline-1 before:outline-inherit before:animate-ping before:duration-800 ${filters[0] && animateFiltersNumber && "before:!block"}`}
-							onClick={_ => setShowFilters(prev => !prev)}>
-							{filters.length}
-						</span>
-						{filters[0] && (
-							<div className={`absolute right-0 top-16/10 p-5 pointer-events-none rounded-3xl border-1 frost flex flex-wrap items-start justify-start gap-4 opacity-0 duration-100 ${showFilters && "opacity-100 !pointer-events-auto"}`}>
-								{filters.map(filter => (
-									<span key={filter} onClick={_ => toggleParam(filter, searchParams, setSearchParams)} className='text-xl relative cursor-pointer flex items-center gap-1 whitespace-nowrap'>
-										<span className='size-6 min-w-6 min-h-6'>
-											<FilledStar3SVG />
-										</span>
-										{genres?.filter(genres => genres.id == filter)[0]?.name || formats.filter(format => format.id == filter)[0]?.name || periods.filter(period => period.id == filter)[0]?.name || filter}
-									</span>
-								))}
-							</div>
-						)}
+		<div className='flex flex-col justify-between min-h-screen'>
+			<div>
+				<ScrollToTop />
+				<div className='noise fixed inset-0 size-full' />
+				<Head fullSearch searchStyle='border-1 frost border-inherit' mode />
+				{!format && (
+					<div className='space-y-15'>
+						<Suspense
+							fallback={
+								<div className='flex-center h-120'>
+									<Loader />
+								</div>
+							}>
+							<MainExploreHighlight />
+						</Suspense>
+						<Trend title='Trending Movies' format='movie' large addP />
+						<Trend title='Trending TV Shows' format='tv' large addP />
+						<Trend title='Top Rated Movies' format='movie' large addP topRated />
+						<Trend title='Top Rated TV Shows' format='tv' large addP topRated />
+						<Trend title='Upcomming Movies' format='movie' large addP upcoming />
+						<Trend title='Now Playing Movies' format='movie' large addP nowPlaying />
+						<Trend title='Airing TV Shows' format='tv' large addP airing />
 					</div>
-				</div>
-			)}
-			{format !== "search" && format && <h1 className='text-4xl mb-10 relative w-fit px-14 mt-12'>{`${type !== "production" ? "Trending " : ""}${capitalize(typeName || "")}${format === "movie" ? " Movies" : " TV Shows"}`}</h1>}
-			{format && <InfiniteGrid observedEl={footerRef} format={format} type={type} id={id} />}
+				)}
+				{format === "search" && (
+					<div className='flex gap-2 frost z-100 items-center py-4 px-5 sticky top-30 border-1 rounded-4xl mb-10 mx-14 mt-12'>
+						<FilterOption option='genre' filters={genres} fallback={"chose a format to change the genre"} />
+						<FilterOption option='format' filters={formats} />
+						<FilterOption option='period' filters={searchParams.get("format") !== "person" ? periods : undefined} fallback={"change  person"} />
+						<div ref={filterNumberRef} className='relative size-11 ml-auto'>
+							<span
+								className={`button active size-full flex-center cursor-pointer rounded-full before:size-8/10 before:rounded-full before:absolute before:inset-1/2 before:hidden before:-translate-1/2 before:outline-1 before:outline-inherit before:animate-ping before:duration-800 ${filters[0] && animateFiltersNumber && "before:!block"}`}
+								onClick={_ => setShowFilters(prev => !prev)}>
+								{filters.length}
+							</span>
+							{filters[0] && (
+								<div className={`absolute right-0 top-16/10 p-5 pointer-events-none rounded-3xl border-1 frost flex flex-wrap items-start justify-start gap-4 opacity-0 duration-100 ${showFilters && "opacity-100 !pointer-events-auto"}`}>
+									{filters.map(filter => (
+										<span key={filter} onClick={_ => toggleParam(filter, searchParams, setSearchParams)} className='text-xl relative cursor-pointer flex items-center gap-1 whitespace-nowrap'>
+											<span className='size-6 min-w-6 min-h-6'>
+												<FilledStar3SVG />
+											</span>
+											{genres?.filter(genres => genres.id == filter)[0]?.name || formats.filter(format => format.id == filter)[0]?.name || periods.filter(period => period.id == filter)[0]?.name || filter}
+										</span>
+									))}
+								</div>
+							)}
+						</div>
+						<div className='button active py-2 flex-center gap-2 px-3 rounded-3xl text-xl cursor-pointer' onClick={_ => setSearchParams({ q: searchParams.get("q") })}>
+							<ResetSVG />
+							Reset Filters
+						</div>
+					</div>
+				)}
+				{format !== "search" && format && <h1 className='text-4xl mb-10 relative w-fit px-14 mt-12'>{`${type !== "production" ? "Trending " : ""}${capitalize(typeName || "")}${format === "movie" ? " Movies" : " TV Shows"}`}</h1>}
+				{format && <InfiniteGrid observedEl={footerRef} format={format} type={type} id={id} />}
+			</div>
 			<div ref={footerRef}>
 				<Footer style='frost' />
 			</div>
-		</>
+		</div>
 	)
 }

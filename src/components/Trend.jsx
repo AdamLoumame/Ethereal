@@ -29,7 +29,7 @@ export default function Trend({ title, format, defaultData = false, defaultId, g
 				)}
 				<Slider id={id} addP={addP}>
 					{results.slice(0, 20).map(trend => (
-						<TrendBox key={trend.id} trend={trend} format={format} large={large === "unset" ? results.length <= 2 : large} />
+						<TrendBox key={trend.id} trend={trend} format={format} large={large === "unset" ? results.length <= 2 : large} customSize={collectionId && (results.length <= 2 ? "min-w-50 max-w-50" : "min-w-36 max-w-36")} />
 					))}
 				</Slider>
 			</div>
