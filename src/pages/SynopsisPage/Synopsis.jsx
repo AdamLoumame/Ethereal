@@ -15,11 +15,15 @@ import Reviews from "./Reviews"
 import PersonCredits from "./PersonCredits"
 import Episodes from "./Episodes"
 import useLocalStorage from "../../utils/useLocalStorage"
+import useMode from "@/utils/useMode"
 
 export let dataContext = createContext(null)
 export default function Synopsis() {
 	let { data, format, seasonN } = useLoaderData()
 	let { data: colors } = useSWR((data.poster_path || data.profile_path) && `colors${data.id + format + (seasonN || "")}`, _ => getPalette(image780 + (data.poster_path || data.profile_path), Math.random() < 0.5), { suspense: true })
+
+	let [isDark, setIsDark] = useMode()
+	useEffect(_ => setIsDark(true), [])
 
 	let [_, setLastBrowsed] = useLocalStorage("lastbrowsed", [])
 	useEffect(_ => setLastBrowsed(prev => (format === "tv" || format === "movie") && [...prev.filter(el => el.id !== data.id), { id: data.id, format }].slice(-3)), [Number(data.id) + format])

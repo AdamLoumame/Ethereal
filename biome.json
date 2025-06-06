@@ -30,9 +30,20 @@
 		"rules": {
 			"recommended": true,
 			"style": { "useConst": "off" },
-			"suspicious": { "noAssignInExpressions": "off", "noDoubleEquals": "off", "noGlobalIsNan": "off" },
-			"a11y": { "useAltText": "off", "noBlankTarget": "off", "useKeyWithClickEvents": "off", "useIframeTitle": "off", "noSvgWithoutTitle": "off" },
-			"correctness": { "useExhaustiveDependencies": "off" }
+			"suspicious": {
+				"noAssignInExpressions": "off",
+				"noDoubleEquals": "off",
+				"noGlobalIsNan": "off"
+			},
+			"a11y": {
+				"useAltText": "off",
+				"noBlankTarget": "off",
+				"useKeyWithClickEvents": "off",
+				"useIframeTitle": "off",
+				"noSvgWithoutTitle": "off"
+			},
+			"correctness": { "useExhaustiveDependencies": "off" },
+			"complexity": { "noForEach": "off" }
 		}
 	}
 }

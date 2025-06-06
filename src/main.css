@@ -7,16 +7,16 @@
 
 *{
 	scroll-behavior:smooth;
-	interpolate-size: allow-keywords;
+	interpolate-size: allow-keywords !important;
 }
 /* Customs */
 :root {
-	interpolate-size: allow-keywords;
 	--dark: #0e1012;
 	--sec-dark: #343434;
 	--text-dark: #f3f6fa;
 	--light: #e8e5f0;
 	--text-light: #1a4572;
+	interpolate-size: allow-keywords !important;
 }
 @theme {
 	--text-13xl: 15rem;
@@ -25,6 +25,8 @@
 	--color-light: var(--light);
 	--color-textLight: var(--text-light);
 	--animate-scale: scale 1s infinite;
+	--breakpoint-2xs: 380px;
+	--breakpoint-xs: 530px;
 	--breakpoint-sm: 680px;
 	--breakpoint-md: 769px;
 	--breakpoint-lg: 1050px;
@@ -49,7 +51,7 @@
 }
 
 html{
-@apply max-md:!text-[12px] max-lg:!text-[13px] max-xl:text-[15px] max-2xl:text-base max-3xl:text-xl max-4xl:text-2xl 4xl:text-3xl
+@apply overflow-x-hidden max-sm:!text-[10px] max-md:!text-[12px] max-lg:!text-[14px] max-xl:text-[15px] max-2xl:text-base max-3xl:text-xl max-4xl:text-2xl 4xl:text-3xl
 }
 
 .text-stroke{
@@ -177,6 +179,7 @@ div:has(.tooltip):hover > .tooltip{
 }
 
 .lazy-img-loaded {
+	transition: .3s;
 	opacity: 1;
 	scale: 1;
 }
@@ -210,6 +213,25 @@ body:has(.no-mode) #nprogress > .bar {
 }
 body:has(.error-page) #nprogress{
 	display: none;
+}
+.star-image {
+	clip-path: path("M332.9994 0C339.4428 179.5176 483.4824 323.5566 663 330C483.4824 336.4434 339.4428 480.4824 332.9994 660C326.5566 480.4824 182.517 336.4434 2.999634 330C182.517 323.5566 326.5566 179.5176 332.9994 0Z");
+}
+@media (max-width: 768px) {
+  .star-image {
+    clip-path: path("M221.9996 0C226.2952 119.6784 322.3216 215.7044 442 220C322.3216 224.2956 226.2952 320.3216 221.9996 440C217.7044 320.3216 121.678 224.2956 1.999756 220C121.678 215.7044 217.7044 119.6784 221.9996 0Z");
+  }
+}
+.main-explore-image{
+	mask-image: linear-gradient(to left, black 0%, transparent 95%);
+}
+@media (max-width: 679px) {
+  .star-image {
+    clip-path: path("M184.9997 0C188.5793 99.732 268.6013 179.7537 369.4444 183.3333C268.6013 186.9129 188.5793 266.9349 184.9997 366.6667C181.4203 266.9349 101.3983 186.9129 0.9998 183.3333C101.3983 179.7537 181.4203 99.732 184.9997 0Z");
+  }
+  .main-explore-image{
+	mask-image: linear-gradient(to bottom, black 0%, transparent 95%);
+ }
 }
 /* animations */
 @keyframes noise {

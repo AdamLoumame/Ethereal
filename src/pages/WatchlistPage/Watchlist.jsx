@@ -27,7 +27,7 @@ export default function Watchlist() {
 						<>
 							<div className='flex justify-between items-center mt-12 mb-10'>
 								<h1 className='text-4xl px-14'>Your Watchlist</h1>
-								<div className='flex gap-4 h-6 mr-14'>
+								<div className='flex gap-4 h-6 mr-14 z-200'>
 									<span className={`rotate-180 duration-250 opacity-50 ${showLeft && "cursor-pointer opacity-100"}`} onClick={_ => scroll("l", 0.5)}>
 										<LongArrowSvg />
 									</span>

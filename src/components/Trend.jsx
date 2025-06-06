@@ -15,12 +15,12 @@ export default function Trend({ title, format, defaultData = false, defaultId, g
 		return (
 			<div className='basis-4/7 flex flex-col gap-4'>
 				{title && (
-					<div className={`${addP ? "px-14" : "px-8"} flex items-center justify-between`}>
-						<h1 className='text-2xl'>{title}</h1>
+					<div className={`${addP ? "px-14" : "px-8"} flex items-center justify-between max-lg:font-medium`}>
+						<h1 className='text-2xl max-lg:text-3xl'>{title}</h1>
 						{results.length >= 19 && !topRated && !upcoming && !nowPlaying && !defaultData && !airing && !recommendationsId && (
-							<Link to={`/explore/${format}${production?.id ? `/production/${production.name}/${production.id}` : genre?.id ? `/genre/${genre.name}/${genre.id}` : ""}`} className='flex-center gap-1 z-45'>
+							<Link to={`/explore/${format}${production?.id ? `/production/${production.name}/${production.id}` : genre?.id ? `/genre/${genre.name}/${genre.id}` : ""}`} className='flex-center gap-1 z-45 max-lg:text-2xl'>
 								See More
-								<span className='size-4 rotate-90'>
+								<span className='size-4 rotate-90 max-lg:size-5'>
 									<ArrowSVG />
 								</span>
 							</Link>

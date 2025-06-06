@@ -14,7 +14,7 @@ export default function Genres() {
 	!genres.includes(trendGenre) && genres.unshift(trendGenre)
 
 	return (
-		<div className='basis-1/7'>
+		<div className='basis-1/7 z-100 relative'>
 			<Slider>{genres.map(genre => !forbiddenGenres.includes(genre.id) && <GenreBox key={genre.name + genre.id} genre={genre} format={format} />)}</Slider>
 		</div>
 	)

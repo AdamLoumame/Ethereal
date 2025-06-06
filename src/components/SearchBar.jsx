@@ -1,11 +1,11 @@
 import { default as SearchSVG } from "@/assets/icons/search.svg?react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import SuggestionsContainer from "./SuggestionsContainer"
 import useWindowClick from "../utils/useWindowClick"
 import useLocalStorage from "../utils/useLocalStorage"
 
-export default function SearchBar({ toggle = false, width, style, fullSearch = false }) {
+export default function SearchBar({ toggle = false, width, style, fullSearch = false, focused, setFocused }) {
 	let [appearSearch, setAppearSearch] = useState(!toggle)
 	let [inputValue, setInputValue] = useState("")
 	let [doneSetting, setDoneSetting] = useState(false)
@@ -39,12 +39,16 @@ export default function SearchBar({ toggle = false, width, style, fullSearch = f
 		[inputValue]
 	)
 
+	useEffect(_ => {
+		if (!focused && searchParams.get("q")) document.querySelector(".search-input").focus()
+	}, [])
+
 	useWindowClick(e => !document.querySelector(".search-bar")?.contains(e.target) && !document.querySelector(".mode")?.contains(e.target) && setAppearSearch(false))
 
 	return (
 		<div className='relative' onClick={_ => setAppearSearch(true)}>
-			<div className={`${style} ${toggle && "search-bar"} h-fit p-2 mr-1 flex items-center rounded-full duration-300`}>
-				<input type='text' className={`${(!toggle || appearSearch) && `${width} mx-2`} duration-300 w-0`} value={inputValue} onInput={e => setInputValue(e.target.value)} />
+			<div className={`${style} ${toggle && "search-bar"} h-fit p-2 max-sm:p-3 mr-1 flex items-center rounded-full duration-300`}>
+				<input type='text' className={`search-input ${(!toggle || appearSearch) && `${width} mx-2`} duration-300 max-sm:text-2xl max-md:text-lg w-0 ${focused && "max-sm:!w-[75vw]"}`} onFocus={_ => setFocused(true)} onBlur={_ => setFocused(false)} value={inputValue} onInput={e => setInputValue(e.target.value)} />
 				<div className='cursor-pointer'>
 					<SearchSVG />
 				</div>

@@ -6,6 +6,7 @@ export default function SliderProvider({ id, deps, render }) {
 	let [showRight, setShowRight] = useState(false)
 
 	let scroll = (d, s = 1) => {
+		console.log("here")
 		let scrollD = s * slider.current.clientWidth - 100
 		slider.current.scrollBy({
 			left: d === "r" ? scrollD : -scrollD,

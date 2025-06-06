@@ -12,7 +12,7 @@ import { default as ResetSVG } from "@/assets/icons/reset.svg?react"
 import useWindowClick from "../../utils/useWindowClick"
 import { formats, periods } from "../../utils/constants"
 import ScrollToTop from "../../components/ScrollTop"
-import MainExploreHighlight from "./MainExploreHighlight"
+import MainExploreHighlight from "../../components/MainExploreHighlight"
 import Trend from "../../components/Trend"
 import Loader from "../../components/Loader"
 import useLocalStorage from "../../utils/useLocalStorage"
@@ -60,11 +60,11 @@ export default function Explore() {
 					<div className='space-y-15'>
 						<Suspense
 							fallback={
-								<div className='flex-center h-120'>
+								<div className='flex-center h-120 max-xs:h-140'>
 									<Loader />
 								</div>
 							}>
-							<MainExploreHighlight />
+							<MainExploreHighlight format='movie' />
 						</Suspense>
 						<Trend title='Trending Movies' format='movie' large addP />
 						<Trend title='Trending TV Shows' format='tv' large addP />

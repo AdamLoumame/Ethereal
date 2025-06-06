@@ -3,7 +3,7 @@ import HeroMovie from "./HeroMovie"
 import { getDetails } from "@/services/api.js"
 import { formatContext } from "./Dashboard"
 import useSWR from "swr"
-import { image780 } from "../../../utils/constants"
+import { image1280 } from "../../../utils/constants"
 
 export default function Top() {
 	let { format } = useContext(formatContext)
@@ -11,9 +11,9 @@ export default function Top() {
 	let trending = useSWR(format, _ => getDetails(format), { suspense: true }).data.results
 
 	return (
-		<div className='flex gap-4 basis-3/7 px-8 max-lg:h-70'>
+		<div className='flex gap-4 basis-3/7 px-8 max-lg:hidden'>
 			{trending.slice(n, n + 2).map((trend, i) => {
-				return <HeroMovie key={trend.id} id={trend.id} format={format} picture={image780 + trend.backdrop_path} i={i} />
+				return <HeroMovie key={trend.id} id={trend.id} format={format} picture={image1280 + trend.backdrop_path} i={i} />
 			})}
 		</div>
 	)

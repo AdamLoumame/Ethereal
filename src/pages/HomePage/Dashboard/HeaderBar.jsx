@@ -6,11 +6,11 @@ export default function HeaderBar() {
 	let { format, setFormat } = useContext(formatContext)
 
 	return (
-		<div className='box flex items-center w-fit rounded-4xl gap-4 mx-auto z-100 max-lg:mr-auto max-lg:mx-0'>
-			<span onClick={_ => setFormat("movie")} className={`${format !== "movie" && "text-[#8f9193]"} duration-200 cursor-pointer py-3 ml-6 `}>
+		<div className='box flex items-center w-fit rounded-4xl gap-4 mx-auto z-100 max-lg:mr-auto'>
+			<span onClick={_ => setFormat("movie")} className={`${format !== "movie" && "text-[#8f9193]"} duration-200 cursor-pointer py-3 ml-6 max-lg:text-xl max-sm:text-2xl`}>
 				Movie
 			</span>
-			<span onClick={_ => setFormat("tv")} className={`${format !== "tv" && "text-[#8f9193]"} duration-200 cursor-pointer py-3 max-lg:mr-6`}>
+			<span onClick={_ => setFormat("tv")} className={`${format !== "tv" && "text-[#8f9193]"} duration-200 cursor-pointer py-3 max-lg:mr-6 max-lg:text-xl max-sm:text-2xl`}>
 				Serie
 			</span>
 			<div className='max-lg:hidden'>
