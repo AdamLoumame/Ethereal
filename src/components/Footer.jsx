@@ -7,7 +7,7 @@ import { default as FilledStar2SVG } from "@/assets/icons/filledstar2.svg?react"
 import { default as StrokeStar3SVG } from "@/assets/icons/strokestar3.svg?react"
 import { default as FilledStar3SVG } from "@/assets/icons/filledstar3.svg?react"
 import Menu from "./Menu"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Copyright from "./Copyright"
 
 export default function Footer({ style = "" }) {
@@ -21,10 +21,26 @@ export default function Footer({ style = "" }) {
 		[showStar]
 	)
 
-	let [mobileStarsLeft, setMobileStarsLeft] = useState(25)
+	let mobileStarRef = useRef(null)
+	let mobileStarFilledRef = useRef(null)
+	let mobileStarLeft = useRef(25)
 	useEffect(_ => {
-		let mobileLeftInterval = setInterval(_ => setMobileStarsLeft(prev => (prev <= -25 ? 25 : prev - 0.2)), 10)
-		return _ => clearInterval(mobileLeftInterval)
+		let frame
+		let lastSpeed = performance.now()
+		let animation = _ => {
+			let now = performance.now()
+			mobileStarLeft.current = mobileStarLeft.current <= -25 ? 25 : mobileStarLeft.current - ((now - lastSpeed) / 8.33) * 0.2
+			Object.assign(mobileStarRef.current?.style, { left: `calc(50% + ${mobileStarLeft.current}rem)`, top: `${Math.sqrt(625 - mobileStarLeft.current ** 2)}rem` })
+			Object.assign(mobileStarFilledRef.current.style, -10 < mobileStarLeft.current && mobileStarLeft.current < 20 ? { left: "75%", top: "35%" } : { left: "", top: "" })
+			console.log(mobileStarLeft.current)
+
+			lastSpeed = now
+
+			frame = requestAnimationFrame(animation)
+		}
+		frame = requestAnimationFrame(animation)
+
+		return _ => cancelAnimationFrame(frame)
 	}, [])
 
 	return (
@@ -54,11 +70,11 @@ export default function Footer({ style = "" }) {
 				<span className='size-7/5 absolute ease top-1/2 left-1/2 -translate-1/2'>{[<StrokeStar1SVG key='1' />, <StrokeStar2SVG key='2' />, <StrokeStar3SVG key='3' />][randStarN]}</span>
 				<span className={`${showStar && "top-7/20 left-3/4 duration-800"} size-7/5 absolute ease top-1/2 left-1/2 -translate-1/2`}>{[<FilledStar1SVG key='1' />, <FilledStar2SVG key='2' />, <FilledStar3SVG key='3' />][randStarN]}</span>
 			</div>
-			<div className='duration-1000 transition-opacity size-15 absolute -translate-1/2 md:opacity-0' style={{ left: `calc(50% + ${mobileStarsLeft}rem)`, top: `${Math.sqrt(625 - mobileStarsLeft ** 2)}rem` }}>
+			<div ref={mobileStarRef} className='duration-1000 transition-opacity size-15 absolute -translate-1/2 md:opacity-0'>
 				<span className='size-7/5 absolute ease top-1/2 left-1/2 -translate-1/2'>
 					<StrokeStar2SVG />
 				</span>
-				<span className={`${-10 < mobileStarsLeft && mobileStarsLeft < 20 && "top-7/20 left-3/4"} duration-800 size-7/5 absolute ease top-1/2 left-1/2 -translate-1/2`}>
+				<span ref={mobileStarFilledRef} className='duration-800 size-7/5 absolute ease top-1/2 left-1/2 -translate-1/2'>
 					<FilledStar2SVG />
 				</span>
 			</div>

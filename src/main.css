@@ -149,6 +149,7 @@ body:has(.no-mode) .button.active,body:has(.no-mode) .button:hover,body:has(.no-
 }
 .slider{
 	mask-image: linear-gradient(90deg,transparent 0,#000 10%,#000 90%,transparent 100%) !important;
+	-webkit-mask-image: linear-gradient(90deg,transparent 0,#000 10%,#000 90%,transparent 100%) !important;
 }
 .slider-button:hover > span{
 	@apply scale-105
@@ -177,6 +178,9 @@ div:has(.tooltip):hover > .tooltip{
 	overflow-x: scroll;
 	scroll-snap-type: x mandatory;
 }
+.scrollx::-webkit-scrollbar {
+	display: none;
+}
 
 .lazy-img-loaded {
 	transition: .3s;
@@ -194,6 +198,7 @@ div:has(.tooltip):hover > .tooltip{
 }
 .episode-image{
 	mask-image: linear-gradient(to bottom, black 20%, transparent 70%);
+	-webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 70%);
 }
 
 #nprogress > .bar {
@@ -222,16 +227,20 @@ body:has(.error-page) #nprogress{
     clip-path: path("M221.9996 0C226.2952 119.6784 322.3216 215.7044 442 220C322.3216 224.2956 226.2952 320.3216 221.9996 440C217.7044 320.3216 121.678 224.2956 1.999756 220C121.678 215.7044 217.7044 119.6784 221.9996 0Z");
   }
 }
-.main-explore-image{
-	mask-image: linear-gradient(to left, black 0%, transparent 95%);
-}
 @media (max-width: 679px) {
   .star-image {
     clip-path: path("M184.9997 0C188.5793 99.732 268.6013 179.7537 369.4444 183.3333C268.6013 186.9129 188.5793 266.9349 184.9997 366.6667C181.4203 266.9349 101.3983 186.9129 0.9998 183.3333C101.3983 179.7537 181.4203 99.732 184.9997 0Z");
   }
-  .main-explore-image{
+}
+.main-explore-image{
+	mask-image: linear-gradient(to left, black 0%, transparent 95%);
+	-webkit-mask-image: linear-gradient(to left, black 0%, transparent 95%);
+}
+@media (max-width: 529px) {
+ .main-explore-image{
 	mask-image: linear-gradient(to bottom, black 0%, transparent 95%);
- }
+	-webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 95%);
+ } 
 }
 /* animations */
 @keyframes noise {

@@ -14,7 +14,7 @@ export default function Head({ fullSearch, style = "", searchStyle = "", mode = 
 	let [focusedSearchBar, setfocusedSearchBar] = useState(false)
 	return (
 		<div ref={headRef} className={`flex sticky top-0 z-1000 items-center justify-between py-4 frost px-14 max-lg:px-8 border-b-1 ${style} ${focusedSearchBar && "max-sm:justify-center"} max-sm:h-35`}>
-			<div className={`w-30 max-lg:w-25 max-sm:w-40 max-2xs:w-30 ${focusedSearchBar && "max-sm:hidden"}`}>
+			<div className={`w-30 max-lg:w-25 max-sm:w-35 max-2xs:w-30 ${focusedSearchBar && "max-sm:hidden"}`}>
 				<Logo />
 			</div>
 			<div className='flex items-center gap-4'>
